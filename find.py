@@ -14,6 +14,7 @@ def main():
     parser.add_argument("pattern", help="the text to look for")
     parser.add_argument("filename", help="the file to search")
     # TODO: add an optional flag -i / --ignore-case  (use action="store_true")
+    parser.add_argument("-i", "--ignore-case", action="store_true", help="ignore case distinctions")
 
     args = parser.parse_args()
 
@@ -21,6 +22,15 @@ def main():
     #   at 1, print "<number>: <line>" when the line contains args.pattern.
     #   If the --ignore-case flag was given, match without caring about upper/lower
     #   case (hint: compare the lowercased versions of both).
+    pattern = args.pattern
+    if args.ignore_case:
+        pattern = pattern.lower()
+
+    with open(args.filename) as file:
+        for line_num, line in enumerate(file, start=1):
+            check_line = line.lower() if args.ignore_case else line
+            if pattern in check_line:
+                print(f"{line_num}: {line.rstrip('\n')}")
 
 
 if __name__ == "__main__":
